@@ -53,6 +53,7 @@ export const mockVisitRecords: PatientVisitRecord[] = [
     status: "closed",
     createdAt: "2026-04-10T09:30:00Z",
     updatedAt: "2026-04-10T10:15:00Z",
+    deletedAt: null,
   },
   {
     id: "v2",
@@ -68,6 +69,7 @@ export const mockVisitRecords: PatientVisitRecord[] = [
     status: "closed",
     createdAt: "2026-04-12T14:00:00Z",
     updatedAt: "2026-04-12T14:30:00Z",
+    deletedAt: null,
   },
   {
     id: "v3",
@@ -85,6 +87,7 @@ export const mockVisitRecords: PatientVisitRecord[] = [
     status: "open",
     createdAt: "2026-04-13T08:00:00Z",
     updatedAt: "2026-04-13T08:00:00Z",
+    deletedAt: null,
   },
   {
     id: "v4",
@@ -100,5 +103,6 @@ export const mockVisitRecords: PatientVisitRecord[] = [
     status: "archived",
     createdAt: "2025-12-15T11:00:00Z",
     updatedAt: "2026-01-20T09:00:00Z",
+    deletedAt: null,
   },
 ];

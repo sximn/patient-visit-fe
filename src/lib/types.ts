@@ -9,7 +9,7 @@ export interface User {
   email: string;
 }
 
-export type VisitStatus = "open" | "closed" | "archived";
+export type VisitStatus = "open" | "closed" | "archived" | "deleted";
 
 export interface PatientVisitRecord {
   id: string;
@@ -25,6 +25,7 @@ export interface PatientVisitRecord {
   status: VisitStatus;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string | null;
 }
 
 export interface SearchFilters {

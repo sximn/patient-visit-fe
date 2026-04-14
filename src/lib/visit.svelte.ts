@@ -2,7 +2,7 @@ import { getContext, setContext } from "svelte";
 import type { PatientVisitRecord, User } from "./types";
 import { mockUsers, mockVisitRecords } from "./mocks";
 
-class VisitState {
+class VisitStore {
   currentUser = $state<User | null>(null);
   records = $state<PatientVisitRecord[]>(mockVisitRecords);
   users = $state<User[]>(mockUsers);
@@ -43,18 +43,21 @@ class VisitState {
   };
 
   deleteRecord = (id: string) => {
-    this.records = this.records.filter((r) => r.id !== id);
+    this.updateRecord(id, {
+      status: "deleted",
+      deletedAt: new Date().toISOString(),
+    });
   };
 }
 
 const VISIT_KEY = Symbol("VISIT_CONTEXT");
 
 export function setVisitContext() {
-  return setContext(VISIT_KEY, new VisitState());
+  return setContext(VISIT_KEY, new VisitStore());
 }
 
 export function useVisitContext() {
-  const context = getContext<VisitState>(VISIT_KEY);
+  const context = getContext<VisitStore>(VISIT_KEY);
   if (!context) {
     throw new Error("useVisitContext must be used after setVisitContext");
   }
