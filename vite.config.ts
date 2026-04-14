@@ -64,7 +64,7 @@ export default defineConfig(({ command }) => {
           compress: { pure_getters: true, unsafe: true, passes: 10 },
           mangle: true,
         }),
-        copyPreviewTemplate(), // copy preview template to dist after build
+        // copyPreviewTemplate(), // copy preview template to dist after build
       ],
 
       build: {
