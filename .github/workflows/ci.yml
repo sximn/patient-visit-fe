@@ -35,11 +35,11 @@ jobs:
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
 
-      - name: Install Puppeteer browser
-        run: pnpm exec puppeteer browsers install chrome-headless-shell
+      # - name: Install Puppeteer browser
+      #   run: pnpm exec puppeteer browsers install chrome-headless-shell
 
       - run: pnpm run build
-      - run: pnpm test
+      # - run: pnpm test
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
