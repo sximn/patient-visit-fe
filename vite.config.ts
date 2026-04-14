@@ -5,7 +5,6 @@ import path, { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { transform } from "esbuild";
 import terser from "@rollup/plugin-terser";
-import { copyFileSync, existsSync } from "fs";
 
 // Compute __dirname for ES Modules:
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -22,29 +21,16 @@ function minifyEs() {
         outputOptions: { format: string },
       ) {
         if (outputOptions.format === "es") {
-          const result = await transform(code, { minify: true });
+          const result = await transform(code, {
+            minify: true,
+            legalComments: "none",
+          });
 
           return result.code;
         }
 
         return code;
       },
-    },
-  };
-}
-
-// Plugin to copy preview template to dist after build
-function copyPreviewTemplate() {
-  return {
-    name: "copy-preview-template",
-    writeBundle() {
-      const previewTemplate = resolve(__dirname, "preview-index.html");
-      const distIndex = resolve(__dirname, "dist/index.html");
-
-      if (existsSync(previewTemplate)) {
-        copyFileSync(previewTemplate, distIndex);
-        console.log("✓ Copied preview-index.html to dist/index.html");
-      }
     },
   };
 }
@@ -64,11 +50,9 @@ export default defineConfig(({ command }) => {
           compress: { pure_getters: true, unsafe: true, passes: 10 },
           mangle: true,
         }),
-        // copyPreviewTemplate(), // copy preview template to dist after build
       ],
 
       build: {
-        // cssCodeSplit: true,
         lib: {
           entry: resolve(__dirname, "src/wc/web-components.ts"),
           name: "SukusPatientVisitDocumentationApp",
@@ -76,16 +60,6 @@ export default defineConfig(({ command }) => {
           formats: ["es"],
         },
 
-        // rollupOptions: {
-        //   // Externalize Svelte runtime to remove it from the bundle
-        //   external: ["svelte", "svelte/internal"],
-        //   output: {
-        //     globals: {
-        //       svelte: "Svelte",
-        //       "svelte/internal": "SvelteInternal",
-        //     },
-        //   },
-        // },
         sourcemap: false,
         outDir: "dist",
       },
