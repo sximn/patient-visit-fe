@@ -1,0 +1,63 @@
+@import "tailwindcss";
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+
+  /* Mapping Shadcn :root to DaisyUI */
+  --color-base-100: oklch(0.9849 0.0029 264.5421); /* --background */
+  --color-base-200: oklch(0.9504 0.0094 279.6866); /* --muted */
+  --color-base-300: oklch(0.8801 0.0154 273.8284); /* --border */
+  --color-base-content: oklch(0.2194 0.016 274.019); /* --foreground */
+
+  --color-primary: oklch(0.7012 0.14 274.9697);
+  --color-primary-content: oklch(0.9796 0.0095 273.3585);
+
+  --color-secondary: oklch(0.9194 0.0395 280.9042);
+  --color-secondary-content: oklch(0.2408 0.0156 274.1439);
+
+  --color-accent: oklch(0.9518 0.0231 277.9569);
+  --color-accent-content: oklch(0.2194 0.016 274.019);
+
+  --color-error: oklch(0.5789 0.1799 24.7386); /* --destructive */
+  --color-error-content: oklch(0.9796 0.0095 273.3585);
+
+  /* Radius mapping */
+  --radius-selector: 0.625rem;
+  --radius-field: 0.625rem;
+  --radius-box: 0.625rem;
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+
+  /* Mapping Shadcn .dark to DaisyUI */
+  --color-base-100: oklch(0.1686 0.011 268.0303);
+  --color-base-200: oklch(0.2808 0.0136 267.071);
+  --color-base-300: oklch(0.3303 0.0106 278.2677);
+  --color-base-content: oklch(0.9194 0.0097 273.3493);
+
+  --color-primary: oklch(0.679 0.1309 275.039);
+  --color-primary-content: oklch(0.1223 0.0085 268.0828);
+
+  --color-secondary: oklch(0.3207 0.0195 281.137);
+  --color-secondary-content: oklch(0.8598 0.0209 276.913);
+
+  --color-accent: oklch(0.2625 0.0292 270.0604);
+  --color-accent-content: oklch(0.9395 0.0289 275.1537);
+
+  --color-error: oklch(0.4795 0.1797 25.092);
+  --color-error-content: oklch(0.9194 0.0097 273.3493);
+
+  --radius-selector: 0.625rem;
+  --radius-field: 0.625rem;
+  --radius-box: 0.625rem;
+}

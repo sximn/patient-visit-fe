@@ -1,0 +1,35 @@
+{
+  "name": "svelte-webcomponent-boierlate",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --open",
+    "build": "vite build",
+    "preview": "vite preview",
+    "standalone": "pnpm dlx serve .",
+    "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json"
+  },
+  "devDependencies": {
+    "@fontsource-variable/inter": "^5.2.8",
+    "@lucide/svelte": "^1.8.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@sveltejs/vite-plugin-svelte": "^5.1.1",
+    "@tailwindcss/forms": "^0.5.11",
+    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/vite": "^4.2.2",
+    "@tsconfig/svelte": "^5.0.5",
+    "@types/node": "^22.18.13",
+    "daisyui": "^5.5.19",
+    "runed": "^0.37.1",
+    "svelte": "^5.43.0",
+    "svelte-check": "^4.3.3",
+    "svelte-toolbelt": "^0.10.6",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.1"
+  },
+  "dependencies": {
+    "esbuild": "^0.28.0"
+  }
+}

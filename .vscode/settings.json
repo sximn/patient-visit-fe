@@ -1,0 +1,10 @@
+{
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
+   	// Run Prettier on save
+	"editor.formatOnSave": true,
+  
+    // Make VS Code use the local version of Prettier from node_modules
+    "prettier.prettierPath": "./node_modules/prettier"
+}
