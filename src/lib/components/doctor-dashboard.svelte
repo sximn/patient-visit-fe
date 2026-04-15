@@ -3,7 +3,7 @@
   import { useVisitContext } from "../visit.svelte";
   import { createEmptyRecordForm } from "../utils/record-form";
   import type { PatientVisitRecord } from "../types";
-  import VisitRecordCard from "./visit/visit-record-card.svelte";
+  import VisitRecordActionCard from "./visit/visit-record-action-card.svelte";
   import VisitRecordDialog from "./visit/visit-record-dialog.svelte";
   import ConfirmDeleteDialog from "./common/confirm-delete-dialog.svelte";
 
@@ -94,7 +94,7 @@
   {:else}
     <div class="grid gap-4">
       {#each doctorRecords as record (record.id)}
-        <VisitRecordCard
+        <VisitRecordActionCard
           {record}
           onEdit={() => openEdit(record)}
           onArchive={() => archiveRecord(record.id)}

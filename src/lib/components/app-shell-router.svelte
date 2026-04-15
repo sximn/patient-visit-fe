@@ -4,6 +4,7 @@
   import AppHeader from "./app-header.svelte";
   import type { Theme } from "../types";
   import DoctorDashboard from "./doctor-dashboard.svelte";
+  import PatientDashboard from "./patient-dashboard.svelte";
 
   let {
     theme = $bindable(),
@@ -21,9 +22,9 @@
     <main>
       {#if visitStore.currentUser.role === "doctor"}
         <DoctorDashboard />
-        <!-- 
       {:else if visitStore.currentUser.role === "patient"}
         <PatientDashboard />
+        <!-- 
       {:else if visitStore.currentUser.role === "admin"}
         <AdminDashboard />
         -->
