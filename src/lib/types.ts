@@ -2,16 +2,16 @@ export type Theme = "dark" | "light";
 
 export type UserRole = "doctor" | "patient" | "admin";
 
-export interface User {
+export type User = {
   id: string;
   name: string;
   role: UserRole;
   email: string;
-}
+};
 
 export type VisitStatus = "open" | "closed" | "archived" | "deleted";
 
-export interface PatientVisitRecord {
+export type PatientVisitRecord = {
   id: string;
   patientId: string;
   patientName: string;
@@ -26,12 +26,12 @@ export interface PatientVisitRecord {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-}
+};
 
-export interface SearchFilters {
+export type SearchFilters = {
   patientName?: string;
   doctorId?: string;
   dateFrom?: string;
   dateTo?: string;
   status?: VisitStatus | "all";
-}
+};

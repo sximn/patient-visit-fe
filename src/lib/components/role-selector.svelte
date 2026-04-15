@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Stethoscope, User, Shield, ArrowRight } from "@lucide/svelte";
+  import { Stethoscope, User, Shield, ArrowRight, Cross } from "@lucide/svelte";
   import { useVisitContext } from "../visit.svelte";
   import type { UserRole } from "../types";
   import { mockUsers } from "../mocks";
@@ -35,12 +35,12 @@
 <div
   class="min-h-screen bg-background flex items-center justify-center p-4 text-base-content"
 >
-  <div class="w-full max-w-4xl">
-    <div class="text-center mb-10">
+  <div class="grid w-full max-w-4xl gap-2">
+    <div class="flex w-full gap-6 justify-center items-center">
       <div
-        class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-4"
+        class="grid shrink-0 items-center justify-center w-20 h-20 rounded-full bg-primary/10"
       >
-        <Stethoscope class="w-10 h-10 text-primary" />
+        <Cross class="w-10 h-10 text-primary" />
       </div>
       <h1 class="text-4xl font-extrabold mb-2 tracking-tight">
         Správa dokumentácie pacientov pri návšteve ambulancie

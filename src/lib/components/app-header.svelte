@@ -30,7 +30,9 @@
         <Stethoscope class="w-5 h-5 text-primary" />
       </div>
       <div>
-        <h1 class="font-semibold text-foreground">Ambulantná dokumentácia</h1>
+        <h1 class="font-semibold text-foreground">
+          Správa dokumentácie návštev
+        </h1>
         <p class="text-xs text-muted-foreground">Nemocnica</p>
       </div>
 

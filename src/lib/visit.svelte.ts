@@ -15,7 +15,10 @@ class VisitStore {
   };
 
   addRecord = (
-    record: Omit<PatientVisitRecord, "id" | "createdAt" | "updatedAt">,
+    record: Omit<
+      PatientVisitRecord,
+      "id" | "createdAt" | "updatedAt" | "deletedAt"
+    >,
   ) => {
     const now = new Date().toISOString();
     const newRecord: PatientVisitRecord = {
@@ -23,6 +26,7 @@ class VisitStore {
       id: `v${Date.now()}`,
       createdAt: now,
       updatedAt: now,
+      deletedAt: null,
     };
     this.records = [newRecord, ...this.records];
   };
