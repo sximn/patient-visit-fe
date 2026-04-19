@@ -8,11 +8,17 @@
 
   let {
     value = "",
+    name,
+    id,
+    class: className = "",
     fetchFn,
     onItemSelected,
     placeholder = "Hľadaj...",
   }: {
     value?: string;
+    name?: string;
+    id?: string;
+    class?: string;
     fetchFn: (query: string) => Promise<Item[]>;
     onItemSelected?: (selected: Item) => void;
     placeholder?: string;
@@ -26,7 +32,6 @@
   let highlightedIndex = $state(-1);
 
   let debounceTimer: ReturnType<typeof setTimeout>;
-  let rootEl: HTMLDivElement;
 
   function selectItem(item: Item) {
     query = item.name;
@@ -108,43 +113,57 @@
     e.preventDefault();
     selectItem(item);
   }
+
+  export function clearSearch() {
+    query = "";
+
+    clearTimeout(debounceTimer);
+    results = [];
+    highlightedIndex = -1;
+    loading = false;
+    open = false;
+  }
 </script>
 
-<div class="relative w-full" bind:this={rootEl}>
-  <input
-    class="input input-bordered w-full"
-    bind:value={query}
-    {placeholder}
-    oninput={onInput}
-    onkeydown={onKeyDown}
-    onfocus={onFocus}
-    onblur={onBlur}
-    autocomplete="off"
-  />
+<div class={className}>
+  <div class="relative w-full">
+    <input
+      {id}
+      {name}
+      class="input input-bordered w-full"
+      bind:value={query}
+      {placeholder}
+      oninput={onInput}
+      onkeydown={onKeyDown}
+      onfocus={onFocus}
+      onblur={onBlur}
+      autocomplete="off"
+    />
 
-  {#if open}
-    <ul
-      class="menu bg-base-100 rounded-box shadow-lg w-full absolute z-50 mt-1 max-h-64 overflow-y-auto border border-accent"
-    >
-      {#if loading}
-        <li class="p-2 text-sm opacity-60">Vyhľadávanie...</li>
-      {:else if results.length === 0}
-        <li class="p-2 text-sm opacity-60 italic">
-          Nenašli sa žiadne výsledky
-        </li>
-      {:else}
-        {#each results as item, i}
-          <li>
-            <button
-              type="button"
-              class={i === highlightedIndex ? "bg-accent" : ""}
-              onmousedown={(e) => onMouseDownItem(e, item)}
-            >
-              {item.name}
-            </button>
+    {#if open}
+      <ul
+        class="menu min-w-max bg-base-100 rounded-box shadow-lg w-full absolute z-50 mt-1 max-h-64 overflow-y-auto border border-accent"
+      >
+        {#if loading}
+          <li class="p-2 text-sm opacity-60">Vyhľadávanie...</li>
+        {:else if results.length === 0}
+          <li class="p-2 text-sm opacity-60 italic">
+            Nenašli sa žiadne výsledky
           </li>
-        {/each}
-      {/if}
-    </ul>
-  {/if}
+        {:else}
+          {#each results as item, i}
+            <li>
+              <button
+                type="button"
+                class={i === highlightedIndex ? "bg-accent" : ""}
+                onmousedown={(e) => onMouseDownItem(e, item)}
+              >
+                {item.name}
+              </button>
+            </li>
+          {/each}
+        {/if}
+      </ul>
+    {/if}
+  </div>
 </div>

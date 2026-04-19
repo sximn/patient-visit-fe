@@ -1,7 +1,8 @@
 <script lang="ts">
   import { SquarePen, Archive, Trash2, Calendar, Clock } from "@lucide/svelte";
-  import type { PatientVisitRecord, VisitStatus } from "../../types";
+  import type { PatientVisitRecord } from "../../types";
   import { formatDate, formatTime } from "../../utils/date";
+  import { statusConfig } from "../../utils/visit-status";
 
   let {
     record,
@@ -14,13 +15,6 @@
     onArchive: () => void;
     onDelete: () => void;
   } = $props();
-
-  const statusConfig: Record<VisitStatus, { label: string; class: string }> = {
-    open: { label: "Otvorený", class: "badge-primary" },
-    closed: { label: "Uzavretý", class: "badge-secondary" },
-    archived: { label: "Archivovaný", class: "badge-outline" },
-    deleted: { label: "Vymazaný", class: "badge-warning" },
-  };
 </script>
 
 <div

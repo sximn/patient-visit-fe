@@ -6,6 +6,7 @@
   import VisitRecordActionCard from "./visit/visit-record-action-card.svelte";
   import VisitRecordDialog from "./visit/visit-record-dialog.svelte";
   import ConfirmDeleteDialog from "./common/confirm-delete-dialog.svelte";
+  import ConfirmArchiveDialog from "./common/confirm-archive-dialog.svelte";
 
   const {
     currentUser,
@@ -23,6 +24,7 @@
 
   let activeDialog = $state<"create" | "edit" | null>(null);
   let selectedRecord = $state<PatientVisitRecord | null>(null);
+  let pendingArchiveId = $state<string | null>(null);
   let pendingDeleteId = $state<string | null>(null);
   let formData = $state(createEmptyRecordForm());
 
@@ -62,6 +64,13 @@
     activeDialog = null;
   }
 
+  function confirmArchive() {
+    if (!pendingArchiveId) return;
+
+    archiveRecord(pendingArchiveId);
+    pendingArchiveId = null;
+  }
+
   function confirmDelete() {
     if (!pendingDeleteId) return;
 
@@ -97,7 +106,7 @@
         <VisitRecordActionCard
           {record}
           onEdit={() => openEdit(record)}
-          onArchive={() => archiveRecord(record.id)}
+          onArchive={() => (pendingArchiveId = record.id)}
           onDelete={() => (pendingDeleteId = record.id)}
         />
       {/each}
@@ -108,10 +117,15 @@
 <VisitRecordDialog
   open={activeDialog !== null}
   mode={activeDialog ?? "create"}
-  {patients}
   {formData}
   onSubmit={handleSubmit}
   onClose={() => (activeDialog = null)}
+/>
+
+<ConfirmArchiveDialog
+  open={pendingArchiveId !== null}
+  onConfirm={confirmArchive}
+  onClose={() => (pendingArchiveId = null)}
 />
 
 <ConfirmDeleteDialog

@@ -1,20 +1,14 @@
 <script lang="ts">
   import { Calendar, Clock, Stethoscope } from "@lucide/svelte";
-  import type { PatientVisitRecord, VisitStatus } from "../../types";
+  import type { PatientVisitRecord } from "../../types";
   import { formatDate, formatTime } from "../../utils/date";
+  import { statusConfig } from "../../utils/visit-status";
 
   let {
     record,
   }: {
     record: PatientVisitRecord;
   } = $props();
-
-  const statusConfig: Record<VisitStatus, { label: string; class: string }> = {
-    open: { label: "Otvorený", class: "badge-primary" },
-    closed: { label: "Uzavretý", class: "badge-secondary" },
-    archived: { label: "Archivovaný", class: "badge-outline" },
-    deleted: { label: "Vymazaný", class: "badge-warning" },
-  };
 </script>
 
 <div

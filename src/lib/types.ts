@@ -9,7 +9,14 @@ export type User = {
   email: string;
 };
 
-export type VisitStatus = "open" | "closed" | "archived" | "deleted";
+export const VISIT_STATUSES = [
+  "open",
+  "closed",
+  "archived",
+  "deleted",
+] as const;
+
+export type VisitStatus = (typeof VISIT_STATUSES)[number];
 
 export type PatientVisitRecord = {
   id: string;

@@ -5,6 +5,9 @@
   import type { Theme } from "../types";
   import DoctorDashboard from "./doctor-dashboard.svelte";
   import PatientDashboard from "./patient-dashboard.svelte";
+  import AdminDashboard from "./admin-dashboard.svelte";
+  import { onMount } from "svelte";
+  import { mockUsers } from "../mocks";
 
   let {
     theme = $bindable(),
@@ -12,6 +15,11 @@
     theme: Theme;
   } = $props();
   const visitStore = setVisitContext();
+
+  onMount(() => {
+    // TODO: dev only:
+    visitStore.setCurrentUser(mockUsers.filter((u) => u.role === "admin")[0]);
+  });
 </script>
 
 {#if !visitStore.currentUser}
@@ -24,10 +32,8 @@
         <DoctorDashboard />
       {:else if visitStore.currentUser.role === "patient"}
         <PatientDashboard />
-        <!-- 
       {:else if visitStore.currentUser.role === "admin"}
         <AdminDashboard />
-        -->
       {/if}
     </main>
   </div>

@@ -7,14 +7,12 @@
   let {
     open = false,
     mode,
-    patients,
     formData,
     onSubmit,
     onClose,
   }: {
     open: boolean;
     mode: "create" | "edit";
-    patients: User[];
     formData: RecordForm;
     onSubmit: () => void;
     onClose: () => void;
@@ -74,12 +72,12 @@
   function handleCancel() {
     dialog.close();
     clearErrors();
-    onClose();
+    onClose?.();
   }
 
   function handleSubmit() {
     if (!validate()) return;
-    onSubmit();
+    onSubmit?.();
   }
 
   function handleSelect(patient: { id: string; name: string }) {
@@ -135,17 +133,6 @@
             {#if errors.patientId}
               <p class="text-error text-sm">{errors.patientId}</p>
             {/if}
-            <!-- <select
-              id="patient"
-              name="patient"
-              class="select select-bordered w-full"
-              bind:value={formData.patientId}
-            >
-              <option disabled value="">Vyberte pacienta</option>
-              {#each patients as p}
-                <option value={p.id}>{p.name}</option>
-              {/each}
-            </select> -->
           </div>
         {/if}
 

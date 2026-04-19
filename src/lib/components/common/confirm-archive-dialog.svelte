@@ -29,7 +29,7 @@
     <div class="modal-action">
       <button class="btn" onclick={onClose}>Zrušiť</button>
 
-      <button class="btn btn-error" onclick={onConfirm}>Archivovať</button>
+      <button class="btn btn-accent" onclick={onConfirm}>Archivovať</button>
     </div>
   </div>
 </dialog>

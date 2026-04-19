@@ -58,7 +58,7 @@ export const mockVisitRecords: PatientVisitRecord[] = [
   {
     id: "v2",
     patientId: "p2",
-    patientName: "MUDr. Šefko Doktor",
+    patientName: "Dedo Vsevedo",
     doctorId: "d1",
     doctorName: "MUDr. Šefko Doktor",
     visitDate: "2026-04-12",

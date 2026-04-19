@@ -1,7 +1,13 @@
 <script lang="ts">
-  import { Stethoscope, User, Shield, ArrowRight, Cross } from "@lucide/svelte";
+  import {
+    Stethoscope,
+    User as UserIcon,
+    Shield,
+    ArrowRight,
+    Cross,
+  } from "@lucide/svelte";
   import { useVisitContext } from "../visit.svelte";
-  import type { UserRole } from "../types";
+  import type { User } from "../types";
   import { mockUsers } from "../mocks";
 
   const visit = useVisitContext();
@@ -13,7 +19,7 @@
       description: "Vytvára a upravuje záznamy o návštevách pacientov",
     },
     patient: {
-      icon: User,
+      icon: UserIcon,
       title: "Pacient",
       description: "Prezerá si svoju zdravotnú dokumentáciu",
     },
@@ -24,8 +30,8 @@
     },
   } as const;
 
-  function handleSelectRole(role: UserRole) {
-    const user = visit.users.find((u) => u.role === role);
+  function handleSelectUser(userId: User["id"]) {
+    const user = visit.users.find((u) => u.id === userId);
     if (user) {
       visit.setCurrentUser(user);
     }
@@ -81,7 +87,7 @@
               <td>
                 <button
                   class="btn btn-ghost group"
-                  onclick={() => handleSelectRole(mockUser.role)}
+                  onclick={() => handleSelectUser(mockUser.id)}
                 >
                   <span>Pokračovať</span>
                   <span class="inline-flex w-4 items-center justify-center">

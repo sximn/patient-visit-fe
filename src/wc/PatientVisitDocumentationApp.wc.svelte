@@ -7,7 +7,7 @@
 </script>
 
 <script lang="ts">
-  let theme: Theme = $state("dark");
+  let theme: Theme = $state("light");
   const styles = "<style>" + appStyles + "</style>";
 </script>
 
