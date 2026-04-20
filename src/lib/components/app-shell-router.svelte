@@ -17,8 +17,8 @@
   const visitStore = setVisitContext();
 
   onMount(() => {
-    // TODO: dev only:
-    visitStore.setCurrentUser(mockUsers.filter((u) => u.role === "admin")[0]);
+    // dev only:
+    // visitStore.setCurrentUser(mockUsers.filter((u) => u.role === "admin")[0]);
   });
 </script>
 

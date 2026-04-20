@@ -34,11 +34,3 @@ export type PatientVisitRecord = {
   updatedAt: string;
   deletedAt: string | null;
 };
-
-export type SearchFilters = {
-  patientName?: string;
-  doctorId?: string;
-  dateFrom?: string;
-  dateTo?: string;
-  status?: VisitStatus | "all";
-};

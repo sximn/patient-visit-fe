@@ -2,8 +2,8 @@
   export type Filter = {
     patientId?: User["id"];
     doctorId?: User["id"];
-    visitDateSince?: Date;
-    visitDateUntil?: Date;
+    visitDateSince?: string;
+    visitDateUntil?: string;
     status?: VisitStatus;
   };
 </script>
