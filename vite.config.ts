@@ -5,6 +5,7 @@ import path, { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { transform } from "esbuild";
 import terser from "@rollup/plugin-terser";
+import { copyFileSync } from "fs";
 
 // Compute __dirname for ES Modules:
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -35,6 +36,15 @@ function minifyEs() {
   };
 }
 
+function copyDemoIndex() {
+  return {
+    name: "copy-demo-html",
+    closeBundle() {
+      copyFileSync("demo-index.html", "dist/index.html");
+    }
+  }
+}
+
 export default defineConfig(({ command }) => {
   if (command === "build") {
     return {
@@ -45,6 +55,7 @@ export default defineConfig(({ command }) => {
             customElement: (id) => id.filename.endsWith(".wc.svelte"),
           },
         }),
+        copyDemoIndex(),
         minifyEs(), // extra minification plugin using esbuild
         terser({
           compress: { pure_getters: true, unsafe: true, passes: 10 },
