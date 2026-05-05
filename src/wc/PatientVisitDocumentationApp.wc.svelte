@@ -2,6 +2,7 @@
 
 <script module lang="ts">
   import rawStyles from "../app.css?inline";
+  import ApiProvider from "../lib/components/api-provider.svelte";
   import AppShellRouter from "../lib/components/app-shell-router.svelte";
   import type { Theme } from "../lib/types";
 
@@ -34,6 +35,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
+  let {
+    basePath,
+    apiBase,
+  }: {
+    basePath: string;
+    apiBase: string;
+  } = $props();
+
   let theme: Theme = $state("light");
   let host: HTMLElement;
 
@@ -46,6 +55,8 @@
   });
 </script>
 
-<div bind:this={host} class="size-full" data-theme={theme}>
-  <AppShellRouter bind:theme />
+<div bind:this={host} class="size-full min-h-fit" data-theme={theme}>
+  <ApiProvider {basePath} {apiBase}>
+    <AppShellRouter bind:theme />
+  </ApiProvider>
 </div>

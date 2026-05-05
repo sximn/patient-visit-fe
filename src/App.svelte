@@ -5,7 +5,9 @@
 
 <main class="size-full min-h-screen bg-amber-100">
   <h2>Custom element:</h2>
-  <!-- Use your custom elements -->
-  <sukus-patient-visit-documentation-app name="Svelte"
+
+  <sukus-patient-visit-documentation-app
+    basePath="/"
+    apiBase="http://localhost:8080/api"
   ></sukus-patient-visit-documentation-app>
 </main>

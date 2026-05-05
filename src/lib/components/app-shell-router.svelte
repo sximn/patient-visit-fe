@@ -7,18 +7,22 @@
   import PatientDashboard from "./patient-dashboard.svelte";
   import AdminDashboard from "./admin-dashboard.svelte";
   import { onMount } from "svelte";
-  import { mockUsers } from "../mocks";
+  import { useApiContext } from "../api.svelte";
 
   let {
     theme = $bindable(),
   }: {
     theme: Theme;
   } = $props();
+
   const visitStore = setVisitContext();
+  const apiContext = useApiContext();
 
   onMount(() => {
     // dev only:
     // visitStore.setCurrentUser(mockUsers.filter((u) => u.role === "admin")[0]);
+    apiContext.fetchPatients();
+    apiContext.fetchDoctors();
   });
 </script>
 

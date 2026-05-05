@@ -85,13 +85,7 @@
     errors.patientId = "";
   }
 
-  function fakeDelay(ms = 350) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   export async function searchPatients(query: string): Promise<User[]> {
-    await fakeDelay(250 + Math.random() * 300);
-
     const q = query.trim().toLowerCase();
 
     if (!q) return [];
