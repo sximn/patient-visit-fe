@@ -13,7 +13,7 @@ export const VISIT_STATUSES = [
   "open",
   "closed",
   "archived",
-  "deleted",
+  "deleted", // TODO: -> initially wanted to implement soft delete, but assignment requires CRUD fullstack functionality, so we delete the record from the DB | so I should remove the status ... ale necham ho tu, aby prezila aspon myslienka soft deletu
 ] as const;
 
 export type VisitStatus = (typeof VISIT_STATUSES)[number];

@@ -3,19 +3,56 @@
   import { useVisitContext } from "../visit.svelte";
   import { createEmptyRecordForm } from "../utils/record-form";
   import type { PatientVisitRecord } from "../types";
-  import VisitFilter from "./visit/visit-filter.svelte";
+  import VisitFilter, { type Filter } from "./visit/visit-filter.svelte";
   import { formatDate } from "../utils/date";
   import VisitStatusBadge from "./visit/visit-status-badge.svelte";
   import AdminVisitRecordDialog from "./visit/admin-visit-record-dialog.svelte";
+  import { onMount } from "svelte";
+
+  let {
+    initializeData,
+  }: {
+    initializeData?: () => void;
+  } = $props();
 
   const { records, doctors } = $derived(useVisitContext());
-
-  const doctorRecords = $derived(records);
 
   let selectedRecord = $state<PatientVisitRecord | null>(null);
   let openRecordDialog = $state(false);
   let formData = $state(createEmptyRecordForm());
   let filterEl: ReturnType<typeof VisitFilter>;
+  let activeFilter = $state<Filter>({});
+
+  const filteredRecords = $derived(
+    records
+      .filter((r) =>
+        activeFilter.doctorId ? r.doctorId === activeFilter.doctorId : true,
+      )
+      .filter((r) =>
+        activeFilter.patientId ? r.patientId === activeFilter.patientId : true,
+      )
+      .filter((r) =>
+        activeFilter.status ? r.status === activeFilter.status : true,
+      )
+      .filter((r) =>
+        activeFilter.visitDateSince
+          ? new Date(r.visitDate) >= new Date(activeFilter.visitDateSince)
+          : true,
+      )
+      .filter((r) =>
+        activeFilter.visitDateUntil
+          ? new Date(r.visitDate) <= new Date(activeFilter.visitDateUntil)
+          : true,
+      ),
+  );
+
+  const foundRecordsText = $derived(
+    filteredRecords.length === 1
+      ? "Nájdený záznam"
+      : [2, 3, 4].includes(filteredRecords.length)
+        ? "Nájdené záznamy"
+        : "Nájdených záznamov",
+  );
 
   function handleRecordSelected(record: PatientVisitRecord) {
     openRecordDialog = true;
@@ -24,6 +61,10 @@
       ...selectedRecord,
     };
   }
+
+  onMount(() => {
+    initializeData?.();
+  });
 </script>
 
 <div class="container grid mx-auto px-4 py-6 gap-6">
@@ -43,16 +84,21 @@
         <h3 class="card-title text-lg">Filtre vyhľadávania</h3>
       </div>
 
-      <VisitFilter {doctors} bind:this={filterEl} />
+      <VisitFilter
+        {doctors}
+        bind:this={filterEl}
+        onFilterChange={(filter) => (activeFilter = filter)}
+      />
     </div>
 
     <div
       class="flex items-center justify-between mt-4 p-4 border-t border-base-300"
     >
       <p class="text-sm text-muted-foreground">
-        Nájdených:
-        <span class="font-medium text-foreground">{0}</span>
-        záznamov
+        {foundRecordsText.split(" ")[0]}:
+        <span class="font-medium text-foreground">{filteredRecords.length}</span
+        >
+        {foundRecordsText.split(" ")[1]}
       </p>
       <div class="flex items-center gap-2">
         <button class="btn btn-block" onclick={() => filterEl.clearFilters()}>
@@ -62,7 +108,7 @@
     </div>
   </div>
 
-  {#if doctorRecords.length === 0}
+  {#if filteredRecords.length === 0}
     <div class="card py-12 text-center">
       <FileText size="48" class="mx-auto opacity-30 mb-6" />
       <p class="text-muted-foreground text-sm">
@@ -92,7 +138,7 @@
               </tr>
             </thead>
             <tbody>
-              {#each doctorRecords as record, i (record.id)}
+              {#each filteredRecords as record, i (record.id)}
                 {@const bg = i % 2 === 0 ? "bg-background" : "bg-base-200"}
                 {@const hoverBg =
                   i % 2 === 0 ? "hover:bg-base-300/70" : "hover:bg-base-300/90"}

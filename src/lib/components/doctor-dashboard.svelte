@@ -7,6 +7,15 @@
   import VisitRecordDialog from "./visit/visit-record-dialog.svelte";
   import ConfirmDeleteDialog from "./common/confirm-delete-dialog.svelte";
   import ConfirmArchiveDialog from "./common/confirm-archive-dialog.svelte";
+  import { onMount } from "svelte";
+  import { useApiContext } from "../api/api.svelte";
+  import { mapFormDataToCreateUpdateVisit } from "../api/mapper";
+
+  let {
+    initializeData,
+  }: {
+    initializeData?: () => void;
+  } = $props();
 
   const {
     currentUser,
@@ -17,6 +26,8 @@
     archiveRecord,
     deleteRecord,
   } = $derived(useVisitContext());
+
+  const apiContext = useApiContext();
 
   const doctorRecords = $derived(
     records.filter((r) => r.doctorId === currentUser?.id),
@@ -43,13 +54,36 @@
     activeDialog = "edit";
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
+    if (!currentUser) {
+      console.error("user not initialized");
+      return;
+    }
+
     if (activeDialog === "create") {
       const patient = patients.find((p) => p.id === formData.patientId);
 
-      if (!patient || !currentUser) return;
+      if (!patient) return;
 
-      addRecord({
+      const { data, error } = await apiContext.createPatientVisit(
+        mapFormDataToCreateUpdateVisit({
+          doctorId: currentUser.id,
+          record: formData,
+        }),
+      );
+
+      if (error) {
+        console.error("failed to perform", activeDialog, error);
+        return;
+      }
+
+      const generatedId = data.id;
+      if (!generatedId) {
+        console.error("faield to retrieve data, refresh the page", error);
+        return;
+      }
+
+      addRecord(generatedId, {
         ...formData,
         patientName: patient.name,
         doctorId: currentUser.id,
@@ -58,6 +92,18 @@
     }
 
     if (activeDialog === "edit" && selectedRecord) {
+      const { error } = await apiContext.updatePatientVisit(
+        selectedRecord.id,
+        mapFormDataToCreateUpdateVisit({
+          doctorId: currentUser.id,
+          record: formData,
+        }),
+      );
+
+      if (error) {
+        console.error("failed to perform", activeDialog, error);
+        return;
+      }
       updateRecord(selectedRecord.id, formData);
     }
 
@@ -71,13 +117,22 @@
     pendingArchiveId = null;
   }
 
-  function confirmDelete() {
+  async function confirmDelete() {
     if (!pendingDeleteId) return;
 
+    const { error } = await apiContext.deletePatientVisit(pendingDeleteId);
+    if (error) {
+      console.error("failed to delete record", error);
+      return;
+    }
     deleteRecord(pendingDeleteId);
 
     pendingDeleteId = null;
   }
+
+  onMount(() => {
+    initializeData?.();
+  });
 </script>
 
 <div class="container mx-auto px-4 py-6">
@@ -115,9 +170,9 @@
 </div>
 
 <VisitRecordDialog
-  open={activeDialog !== null}
+  open={!!activeDialog}
   mode={activeDialog ?? "create"}
-  {formData}
+  bind:formData
   onSubmit={handleSubmit}
   onClose={() => (activeDialog = null)}
 />

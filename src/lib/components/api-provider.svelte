@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import { createApiContext } from "../api.svelte";
+  import { createApiContext } from "../api/api.svelte";
 
   let {
     children,
@@ -12,6 +12,7 @@
     children?: Snippet;
   } = $props();
 
+  // svelte-ignore state_referenced_locally
   const api = createApiContext(basePath, apiBase);
 </script>
 

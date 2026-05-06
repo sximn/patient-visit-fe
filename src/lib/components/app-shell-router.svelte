@@ -2,12 +2,18 @@
   import RoleSelector from "./role-selector.svelte";
   import { setVisitContext } from "../visit.svelte.js";
   import AppHeader from "./app-header.svelte";
-  import type { Theme } from "../types";
+  import type { PatientVisitRecord, Theme, User } from "../types";
   import DoctorDashboard from "./doctor-dashboard.svelte";
   import PatientDashboard from "./patient-dashboard.svelte";
   import AdminDashboard from "./admin-dashboard.svelte";
   import { onMount } from "svelte";
-  import { useApiContext } from "../api.svelte";
+  import { useApiContext } from "../api/api.svelte";
+  import {
+    mapDoctorToUser,
+    mapPatientToUser,
+    mapPatientVisitToRecord,
+  } from "../api/mapper";
+  import type { components } from "../api/api-schema";
 
   let {
     theme = $bindable(),
@@ -18,11 +24,106 @@
   const visitStore = setVisitContext();
   const apiContext = useApiContext();
 
-  onMount(() => {
+  async function fetchAndStorePatients() {
+    const { data, error } = await apiContext.fetchPatients();
+    if (error || !data) {
+      return;
+    }
+
+    const patients: User[] = [];
+    data.forEach((p) => {
+      const user = mapPatientToUser(p);
+      if (user) {
+        patients.push(user);
+      } else {
+        console.error("cannot parse patient data", p);
+      }
+    });
+    visitStore.patients = patients;
+  }
+
+  async function fetchAndStoreDoctors() {
+    const { data, error } = await apiContext.fetchDoctors();
+    if (error || !data) {
+      return;
+    }
+
+    const doctors: User[] = [];
+    data.forEach((d) => {
+      const user = mapDoctorToUser(d);
+      if (user) {
+        doctors.push(user);
+      } else {
+        console.error("cannot parse doctor data", d);
+      }
+    });
+    visitStore.doctors = doctors;
+  }
+
+  function mapAndStoreRecord(data: components["schemas"]["PatientVisit"][]) {
+    const records: PatientVisitRecord[] = [];
+    data.forEach((v) => {
+      const record = mapPatientVisitToRecord(v);
+      if (record) {
+        records.push(record);
+      } else {
+        console.error("cannot parse visit record data", v);
+      }
+    });
+    visitStore.records = records;
+  }
+
+  async function fetchAndStoreRecords() {
+    const { data, error } = await apiContext.fetchAllVisits();
+    if (error || !data) {
+      return;
+    }
+    mapAndStoreRecord(data);
+  }
+  async function fetchAndStoreDoctorRecords(doctorId: string) {
+    const { data, error } = await apiContext.fetchDoctorVisits(doctorId);
+    if (error || !data) {
+      return;
+    }
+    mapAndStoreRecord(data);
+  }
+  async function fetchAndStorePatientRecords(patientId: string) {
+    const { data, error } = await apiContext.fetchPatientVisits(patientId);
+    if (error || !data) {
+      return;
+    }
+    mapAndStoreRecord(data);
+  }
+
+  function initializeData() {
+    const user = visitStore.currentUser;
+    if (!user) {
+      return;
+    }
+
+    const { role, id } = user;
+
+    switch (role) {
+      case "admin":
+        fetchAndStoreDoctors();
+        fetchAndStorePatients();
+        fetchAndStoreRecords();
+        break;
+
+      case "doctor":
+        fetchAndStorePatients();
+        fetchAndStoreDoctorRecords(id);
+        break;
+
+      case "patient":
+        fetchAndStorePatientRecords(id);
+        break;
+    }
+  }
+
+  onMount(async () => {
     // dev only:
     // visitStore.setCurrentUser(mockUsers.filter((u) => u.role === "admin")[0]);
-    apiContext.fetchPatients();
-    apiContext.fetchDoctors();
   });
 </script>
 
@@ -33,11 +134,11 @@
     <AppHeader bind:theme />
     <main>
       {#if visitStore.currentUser.role === "doctor"}
-        <DoctorDashboard />
+        <DoctorDashboard {initializeData} />
       {:else if visitStore.currentUser.role === "patient"}
-        <PatientDashboard />
+        <PatientDashboard {initializeData} />
       {:else if visitStore.currentUser.role === "admin"}
-        <AdminDashboard />
+        <AdminDashboard {initializeData} />
       {/if}
     </main>
   </div>

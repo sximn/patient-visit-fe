@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --open",
+    "openapi": "openapi-typescript src/lib/api/patient-visit-documentation.openapi.json -o src/lib/api/api-schema.d.ts",
     "build": "vite build",
     "preview": "vite preview",
     "standalone": "serve .",
@@ -21,6 +22,7 @@
     "@tsconfig/svelte": "^5.0.5",
     "@types/node": "^22.18.13",
     "daisyui": "^5.5.19",
+    "openapi-typescript": "^7.13.0",
     "runed": "^0.37.1",
     "serve": "^14.2.6",
     "svelte": "^5.43.0",
@@ -31,6 +33,7 @@
     "vite": "^6.4.1"
   },
   "dependencies": {
-    "esbuild": "^0.28.0"
+    "esbuild": "^0.28.0",
+    "openapi-fetch": "^0.17.0"
   }
 }

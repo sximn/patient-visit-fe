@@ -25,17 +25,15 @@
   let patientAutocompleteEl: ReturnType<typeof PatientAutocomplete>;
   let filterData: Filter = $state({});
 
+  $effect(() => {
+    onFilterChange?.(filterData);
+  });
+
   function handlePatientSelect(patient: { id: string; name: string }) {
     filterData.patientId = patient.id;
   }
 
-  function fakeDelay(ms = 350) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   export async function searchPatients(query: string): Promise<User[]> {
-    await fakeDelay(250 + Math.random() * 300);
-
     const q = query.trim().toLowerCase();
 
     if (!q) return [];
@@ -52,11 +50,10 @@
   export function clearFilters() {
     filterData = {};
     patientAutocompleteEl.clearSearch();
-    onFilterChange?.(filterData);
+    // onFilterChange?.(filterData);
   }
 </script>
 
-<pre>{JSON.stringify(filterData)}</pre>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
   <div class="space-y-2">
     <label class="label" for="patient">

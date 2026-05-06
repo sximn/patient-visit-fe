@@ -2,12 +2,23 @@
   import { FileText } from "@lucide/svelte";
   import { useVisitContext } from "../visit.svelte";
   import VisitRecordPreviewCard from "./visit/visit-record-preview-card.svelte";
+  import { onMount } from "svelte";
+
+  let {
+    initializeData,
+  }: {
+    initializeData?: () => void;
+  } = $props();
 
   const { currentUser, records } = $derived(useVisitContext());
 
   const patientRecords = $derived(
     records.filter((r) => r.patientId === currentUser?.id),
   );
+
+  onMount(() => {
+    initializeData?.();
+  });
 </script>
 
 <div class="container mx-auto px-4 py-6">

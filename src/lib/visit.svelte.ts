@@ -1,20 +1,21 @@
 import { getContext, setContext } from "svelte";
 import type { PatientVisitRecord, User } from "./types";
-import { mockUsers, mockVisitRecords } from "./mocks";
+import { mockUsers } from "./mocks";
 
 class VisitStore {
   currentUser = $state<User | null>(null);
-  records = $state<PatientVisitRecord[]>(mockVisitRecords);
+  records = $state<PatientVisitRecord[]>([]);
   users = $state<User[]>(mockUsers);
 
-  doctors = $derived(this.users.filter((u) => u.role === "doctor"));
-  patients = $derived(this.users.filter((u) => u.role === "patient"));
+  doctors = $state<User[]>([]); //$derived(this.users.filter((u) => u.role === "doctor"));
+  patients = $state<User[]>([]); //$derived(this.users.filter((u) => u.role === "patient"));
 
   setCurrentUser = (user: User | null) => {
     this.currentUser = user;
   };
 
   addRecord = (
+    id: string,
     record: Omit<
       PatientVisitRecord,
       "id" | "createdAt" | "updatedAt" | "deletedAt"
@@ -23,7 +24,7 @@ class VisitStore {
     const now = new Date().toISOString();
     const newRecord: PatientVisitRecord = {
       ...record,
-      id: `v${Date.now()}`,
+      id,
       createdAt: now,
       updatedAt: now,
       deletedAt: null,
@@ -47,10 +48,7 @@ class VisitStore {
   };
 
   deleteRecord = (id: string) => {
-    this.updateRecord(id, {
-      status: "deleted",
-      deletedAt: new Date().toISOString(),
-    });
+    this.records = this.records.filter((r) => r.id !== id);
   };
 }
 

@@ -7,7 +7,7 @@
   let {
     open = false,
     mode,
-    formData,
+    formData = $bindable(),
     onSubmit,
     onClose,
   }: {
@@ -23,12 +23,17 @@
     patientId: "",
     visitDate: "",
     anamnesis: "",
+    conclusion: "",
     findings: "",
   });
 
   $effect(() => {
+    if (!dialog) return;
+
     if (open) {
-      dialog.showModal();
+      if (!dialog.open) dialog.showModal();
+    } else {
+      if (dialog.open) dialog.close();
     }
   });
 
@@ -37,6 +42,7 @@
       patientId: "",
       visitDate: "",
       anamnesis: "",
+      conclusion: "",
       findings: "",
     };
   }
@@ -63,6 +69,11 @@
 
     if (!formData.findings.trim()) {
       errors.findings = "Nález je povinný";
+      valid = false;
+    }
+
+    if (!formData.conclusion.trim()) {
+      errors.conclusion = "Záver je povinný";
       valid = false;
     }
 
@@ -182,6 +193,24 @@
         ></textarea>
         {#if errors.findings}
           <p class="text-error text-sm">{errors.findings}</p>
+        {/if}
+      </div>
+
+      <div class="space-y-2">
+        <label class="label" for="conclusion">
+          <span class="label-text">
+            Záver <span class="text-warning">*</span>
+          </span>
+        </label>
+        <textarea
+          id="conclusion"
+          name="conclusion"
+          class="textarea textarea-bordered h-24 w-full"
+          placeholder="Záver..."
+          bind:value={formData.conclusion}
+        ></textarea>
+        {#if errors.conclusion}
+          <p class="text-error text-sm">{errors.conclusion}</p>
         {/if}
       </div>
 
