@@ -3,6 +3,8 @@
   import type { PatientVisitRecord } from "../../types";
   import { formatDate, formatTime } from "../../utils/date";
   import { statusConfig } from "../../utils/visit-status";
+  import { fly } from "svelte/transition";
+  import { cubicOut, quadIn } from "svelte/easing";
 
   let {
     record,
@@ -18,6 +20,8 @@
 </script>
 
 <div
+  in:fly={{ duration: 300, y: 200, easing: cubicOut }}
+  out:fly={{ duration: 350, x: 400, easing: quadIn, opacity: 0 }}
   class="card bg-base-100 border border-base-300 hover:shadow-md transition-shadow"
 >
   <div class="card-body p-6">
