@@ -35,7 +35,7 @@
 
   let activeDialog = $state<"create" | "edit" | null>(null);
   let selectedRecord = $state<PatientVisitRecord | null>(null);
-  let pendingArchiveId = $state<string | null>(null);
+  let pendingArchiveRecord = $state<PatientVisitRecord | null>(null);
   let pendingDeleteId = $state<string | null>(null);
   let formData = $state(createEmptyRecordForm());
 
@@ -110,11 +110,31 @@
     activeDialog = null;
   }
 
-  function confirmArchive() {
-    if (!pendingArchiveId) return;
+  async function confirmArchive() {
+    if (!currentUser) {
+      console.error("user not initialized");
+      return;
+    }
+    if (!pendingArchiveRecord) return;
 
-    archiveRecord(pendingArchiveId);
-    pendingArchiveId = null;
+    const { error } = await apiContext.updatePatientVisit(
+      pendingArchiveRecord.id,
+      mapFormDataToCreateUpdateVisit({
+        doctorId: currentUser.id,
+        record: {
+          ...pendingArchiveRecord,
+          status: "archived",
+        },
+      }),
+    );
+
+    if (error) {
+      console.error("failed to archive record", error);
+      return;
+    }
+
+    archiveRecord(pendingArchiveRecord.id);
+    pendingArchiveRecord = null;
   }
 
   async function confirmDelete() {
@@ -161,7 +181,7 @@
         <VisitRecordActionCard
           {record}
           onEdit={() => openEdit(record)}
-          onArchive={() => (pendingArchiveId = record.id)}
+          onArchive={() => (pendingArchiveRecord = record)}
           onDelete={() => (pendingDeleteId = record.id)}
         />
       {/each}
@@ -178,9 +198,9 @@
 />
 
 <ConfirmArchiveDialog
-  open={pendingArchiveId !== null}
+  open={pendingArchiveRecord !== null}
   onConfirm={confirmArchive}
-  onClose={() => (pendingArchiveId = null)}
+  onClose={() => (pendingArchiveRecord = null)}
 />
 
 <ConfirmDeleteDialog
