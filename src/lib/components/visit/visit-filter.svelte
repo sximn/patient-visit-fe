@@ -9,10 +9,11 @@
 </script>
 
 <script lang="ts">
-  import { mockPatients } from "../../mocks";
   import { VISIT_STATUSES, type User, type VisitStatus } from "../../types";
   import { statusConfig } from "../../utils/visit-status";
+  import { useVisitContext } from "../../visit.svelte";
   import PatientAutocomplete from "../common/patient-autocomplete.svelte";
+  import { searchPatients } from "../common/patient-search";
 
   let {
     doctors,
@@ -21,6 +22,8 @@
     doctors: User[];
     onFilterChange?: (filter: Filter) => void;
   } = $props();
+
+  const visitStore = useVisitContext();
 
   let patientAutocompleteEl: ReturnType<typeof PatientAutocomplete>;
   let filterData: Filter = $state({});
@@ -33,18 +36,8 @@
     filterData.patientId = patient.id;
   }
 
-  export async function searchPatients(query: string): Promise<User[]> {
-    const q = query.trim().toLowerCase();
-
-    if (!q) return [];
-
-    return mockPatients.filter((user) => {
-      return (
-        user.role === "patient" &&
-        (user.name.toLowerCase().includes(q) ||
-          user.email.toLowerCase().includes(q))
-      );
-    });
+  export async function asyncSearchPatients(query: string): Promise<User[]> {
+    return Promise.try(searchPatients, query, visitStore.patients);
   }
 
   export function clearFilters() {
@@ -65,7 +58,7 @@
       bind:this={patientAutocompleteEl}
       id="patient"
       name="patient"
-      fetchFn={searchPatients}
+      fetchFn={asyncSearchPatients}
       onItemSelected={(i) => handlePatientSelect(i)}
     />
   </div>

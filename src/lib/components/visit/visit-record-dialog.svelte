@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { mockPatients } from "../../mocks";
   import type { User } from "../../types";
   import type { RecordForm } from "../../utils/record-form";
+  import { useVisitContext } from "../../visit.svelte";
   import PatientAutocomplete from "../common/patient-autocomplete.svelte";
+  import { searchPatients } from "../common/patient-search";
 
   let {
     open = false,
@@ -17,6 +18,8 @@
     onSubmit: () => void;
     onClose: () => void;
   } = $props();
+
+  const visitStore = useVisitContext();
 
   let dialog: HTMLDialogElement;
   let errors = $state({
@@ -96,18 +99,8 @@
     errors.patientId = "";
   }
 
-  export async function searchPatients(query: string): Promise<User[]> {
-    const q = query.trim().toLowerCase();
-
-    if (!q) return [];
-
-    return mockPatients.filter((user) => {
-      return (
-        user.role === "patient" &&
-        (user.name.toLowerCase().includes(q) ||
-          user.email.toLowerCase().includes(q))
-      );
-    });
+  export async function asyncSearchPatients(query: string): Promise<User[]> {
+    return Promise.try(searchPatients, query, visitStore.patients);
   }
 </script>
 
@@ -132,7 +125,7 @@
             </label>
 
             <PatientAutocomplete
-              fetchFn={searchPatients}
+              fetchFn={asyncSearchPatients}
               onItemSelected={(i) => handleSelect(i)}
             />
             {#if errors.patientId}
