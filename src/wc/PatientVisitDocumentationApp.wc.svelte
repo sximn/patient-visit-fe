@@ -20,7 +20,11 @@
 
   // build the patched sheet
   const shadowSheet = new CSSStyleSheet();
-  const patched = rawStyles.replace(/:root/g, ":host");
+  const patched = rawStyles
+    .replace(/:root/g, ":host")
+    // replace daisyUI's inline SVG noise because it uses a data: URI,
+    // which triggers the app's strict CSP
+    .replace(/--fx-noise\s*:\s*url\([^;]*\)\s*;/g, "--fx-noise:none;");
   shadowSheet.replaceSync(patched);
 
   // extract @property initial values and add to :host
