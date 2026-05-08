@@ -7,7 +7,7 @@
   <h2>Custom element:</h2>
 
   <sukus-patient-visit-documentation-app
-    basePath="/"
-    apiBase="http://localhost:8080/api"
+    base-path="/"
+    api-base="http://localhost:8080/api"
   ></sukus-patient-visit-documentation-app>
 </main>

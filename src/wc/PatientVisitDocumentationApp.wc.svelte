@@ -1,4 +1,16 @@
-<svelte:options customElement="sukus-patient-visit-documentation-app" />
+<svelte:options
+  customElement={{
+    tag: "sukus-patient-visit-documentation-app",
+    props: {
+      basePath: {
+        attribute: "base-path",
+      },
+      apiBase: {
+        attribute: "api-base",
+      },
+    },
+  }}
+/>
 
 <script module lang="ts">
   import rawStyles from "../app.css?inline";

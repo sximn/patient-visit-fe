@@ -1,7 +1,6 @@
 import { getContext, setContext } from "svelte";
 import createClient, { type Client } from "openapi-fetch";
 import type { components, paths } from "./api-schema";
-import path from "path";
 
 class ApiStore {
   private readonly client: Client<paths, `${string}/${string}`>;
@@ -10,7 +9,7 @@ class ApiStore {
     private readonly basePath: string,
     private readonly apiBase: string,
   ) {
-    this.client = createClient<paths>({ baseUrl: apiBase });
+    this.client = createClient<paths>({ baseUrl: this.apiBase });
   }
 
   get baseUri() {
