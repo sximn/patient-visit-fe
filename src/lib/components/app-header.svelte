@@ -50,7 +50,7 @@
     </div>
 
     <div class="flex items-center gap-4">
-      {#if theme === "dark"}
+      <!-- {#if theme === "dark"}
         <button class="btn group" onclick={() => (theme = "light")}>
           <Sun
             class="w-4 h-4 group-hover:rotate-45 transition-transform duration-300"
@@ -62,7 +62,7 @@
             class="w-4 h-4 group-hover:rotate-15 transition-transform duration-300"
           />
         </button>
-      {/if}
+      {/if} -->
 
       <button class="btn group" onclick={() => setCurrentUser(null)}>
         <LogOut
