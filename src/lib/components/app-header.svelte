@@ -1,6 +1,14 @@
 <script lang="ts">
   import type { Theme, UserRole } from "../types";
-  import { Stethoscope, User, Shield, LogOut, Moon, Sun } from "@lucide/svelte";
+  import {
+    Stethoscope,
+    User,
+    Shield,
+    LogOut,
+    Moon,
+    Sun,
+    Cross,
+  } from "@lucide/svelte";
   import { useVisitContext } from "../visit.svelte";
 
   let {
@@ -27,7 +35,7 @@
       <div
         class="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10"
       >
-        <Stethoscope class="w-5 h-5 text-primary" />
+        <Cross class="w-5 h-5 text-primary" />
       </div>
       <div>
         <h1 class="font-semibold text-foreground">
