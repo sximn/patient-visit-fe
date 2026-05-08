@@ -41,8 +41,8 @@ function copyDemoIndex() {
     name: "copy-demo-html",
     closeBundle() {
       copyFileSync("demo-index.html", "dist/index.html");
-    }
-  }
+    },
+  };
 }
 
 export default defineConfig(({ command }) => {

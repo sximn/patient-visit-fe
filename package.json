@@ -7,6 +7,7 @@
     "dev": "vite --open",
     "openapi": "openapi-typescript src/lib/api/patient-visit-documentation.openapi.json -o src/lib/api/api-schema.d.ts",
     "build": "vite build",
+    "test": "vitest --run",
     "preview": "vite preview",
     "standalone": "serve .",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json"
@@ -30,7 +31,8 @@
     "svelte-toolbelt": "^0.10.6",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3",
-    "vite": "^6.4.1"
+    "vite": "^6.4.1",
+    "vitest": "^4.1.5"
   },
   "dependencies": {
     "esbuild": "^0.28.0",

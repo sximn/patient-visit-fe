@@ -39,7 +39,7 @@ jobs:
       #   run: pnpm exec puppeteer browsers install chrome-headless-shell
 
       - run: pnpm run build
-      # - run: pnpm test
+      - run: pnpm run test
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1

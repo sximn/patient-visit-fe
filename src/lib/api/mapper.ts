@@ -37,22 +37,6 @@ export function mapDoctorToUser(doctor: DoctorSuccessResponse[number]) {
 export function mapPatientVisitToRecord(
   visit: components["schemas"]["PatientVisit"],
 ) {
-  /*
-    {
-        "id": "2282ba60-7c96-4ab0-bb19-945237cd3850",
-        "patientId": "p3",
-        "patientName": "Niekto Další",
-        "doctorId": "d1",
-        "doctorName": "MUDr. Šefko Doktor",
-        "visitDate": "2026-05-05",
-        "anamnesis": "Nieco zle to vyzera byt",
-        "findings": "Nejaky nebezpecny nalez\n",
-        "notes": "treba to riesit veru",
-        "status": "open",
-        "createdAt": "2026-05-05T17:51:45.346Z",
-        "updatedAt": "2026-05-05T17:51:45.346Z"
-    }
-    */
   if (
     !visit.id ||
     !visit.patientId ||

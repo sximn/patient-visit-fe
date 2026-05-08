@@ -50,6 +50,7 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
+  import { resolveTheme } from "../lib/utils/theme";
 
   let {
     basePath,
@@ -59,33 +60,7 @@
     apiBase: string;
   } = $props();
 
-  function extractInitialTheme(): Theme {
-    // 1) check localStorage
-    const raw = localStorage.getItem("@polyfea/theme");
-    if (raw) {
-      try {
-        const themeObj = JSON.parse(raw);
-        if ("isDark" in themeObj && typeof themeObj.isDark === "boolean") {
-          return themeObj.isDark ? "dark" : "light";
-        }
-      } catch {
-        // ignore malformed data and continue with other options
-      }
-    }
-
-    // 2) fall back to system preference
-    if (window.matchMedia) {
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches)
-        return "dark";
-      if (window.matchMedia("(prefers-color-scheme: light)").matches)
-        return "light";
-    }
-
-    // 3) default to light
-    return "light";
-  }
-
-  let theme = $state(extractInitialTheme());
+  let theme = $state(resolveTheme(localStorage.getItem("@polyfea/theme")));
   let host: HTMLElement;
 
   onMount(() => {
