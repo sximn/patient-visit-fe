@@ -59,7 +59,33 @@
     apiBase: string;
   } = $props();
 
-  let theme: Theme = $state("light");
+  function extractInitialTheme(): Theme {
+    // 1) check localStorage
+    const raw = localStorage.getItem("@polyfea/theme");
+    if (raw) {
+      try {
+        const themeObj = JSON.parse(raw);
+        if ("isDark" in themeObj && typeof themeObj.isDark === "boolean") {
+          return themeObj.isDark ? "dark" : "light";
+        }
+      } catch {
+        // ignore malformed data and continue with other options
+      }
+    }
+
+    // 2) fall back to system preference
+    if (window.matchMedia) {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches)
+        return "dark";
+      if (window.matchMedia("(prefers-color-scheme: light)").matches)
+        return "light";
+    }
+
+    // 3) default to light
+    return "light";
+  }
+
+  let theme = $state(extractInitialTheme());
   let host: HTMLElement;
 
   onMount(() => {
@@ -68,6 +94,13 @@
     if (root?.adoptedStyleSheets) {
       root.adoptedStyleSheets = [shadowSheet];
     }
+
+    document.addEventListener("polyfea-theme-changed", (e: Event) => {
+      const ce = e as CustomEvent;
+      if ("isDark" in ce.detail && typeof ce.detail.isDark === "boolean") {
+        theme = ce.detail.isDark ? "dark" : "light";
+      }
+    });
   });
 </script>
 
