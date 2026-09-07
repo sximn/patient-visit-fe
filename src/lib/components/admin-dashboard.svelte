@@ -101,6 +101,9 @@
         {foundRecordsText.split(" ")[1]}
       </p>
       <div class="flex items-center gap-2">
+        {#if activeFilter.status}
+          <span class="badge badge-outline">{filterEl.getActiveFilterLabel()}</span>
+        {/if}
         <button class="btn btn-block" onclick={() => filterEl.clearFilters()}>
           Vyčistiť filtre
         </button>
