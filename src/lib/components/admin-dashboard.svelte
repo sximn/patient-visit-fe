@@ -153,7 +153,7 @@
                     {record.doctorName}
                   </td>
                   <td>
-                    {formatDate(record.createdAt)}
+                    {formatDate(record.visitDate)}
                   </td>
                   <td>
                     <VisitStatusBadge status={record.status} />
