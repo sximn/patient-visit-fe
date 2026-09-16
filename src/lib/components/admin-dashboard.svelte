@@ -43,6 +43,11 @@
         activeFilter.visitDateUntil
           ? new Date(r.visitDate) <= new Date(activeFilter.visitDateUntil)
           : true,
+      )
+      .sort(
+        (first, second) =>
+          new Date(first.visitDate).getTime() -
+          new Date(second.visitDate).getTime(),
       ),
   );
 
